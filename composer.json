@@ -1,0 +1,16 @@
+{
+    "name": "krzar/laravel-translation-generator",
+    "description": "Translations generator for laravel apps.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Krystian Zaręba"
+        }
+    ],
+    "require": {
+        "illuminate/console": "^8.0",
+        "illuminate/support": "^8.0",
+        "illuminate/collections": "^8.0",
+        "ext-json": "*"
+    }
+}
