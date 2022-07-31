@@ -13,7 +13,7 @@ This package allows you to:
 ## Installation
 
 ```bash
-composer require krzar/laravel-tranlsation-generator
+composer require krzar/laravel-translation-generator
 ```
 
 ## Usage
