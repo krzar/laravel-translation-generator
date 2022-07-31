@@ -5,7 +5,7 @@ This package allows you to:
 - Generate new translation files for each language,
 - Completing missing keys for translations
 
-# Supports
+## Supports
 
 - Laravel 8+
 - PHP 7.3+
