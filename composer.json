@@ -7,10 +7,22 @@
             "name": "Krystian Zaręba"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Krzar\\LaravelTranslationGenerator\\": "src/"
+        }
+    },
     "require": {
         "illuminate/console": "^8.0",
         "illuminate/support": "^8.0",
         "illuminate/collections": "^8.0",
         "ext-json": "*"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Krzar\\LaravelTranslationGenerator\\LaravelTranslationGeneratorServiceProvider"
+            ]
+        }
     }
 }
