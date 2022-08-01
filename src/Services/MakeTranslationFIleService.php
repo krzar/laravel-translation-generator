@@ -7,28 +7,24 @@ use Krzar\LaravelTranslationGenerator\Services\Generators\PhpFileGenerator;
 
 class MakeTranslationFIleService
 {
-    /**
-     * @var PhpFileGenerator
-     */
-    private $phpFileGenerator;
-
-    public function __construct(PhpFileGenerator $phpFileGenerator)
+    public function __construct(
+        private PhpFileGenerator $phpFileGenerator
+    )
     {
-        $this->phpFileGenerator = $phpFileGenerator;
     }
 
     public function generate(string $name)
     {
-        $this->getLanguages()->each(function (string $lang) use ($name) {
-            $this->generateFile($name, $lang);
-        });
+        $this->getLanguages()->each(
+            fn(string $lang) => $this->generateFile($name, $lang)
+        );
     }
 
     private function getLanguages(): Collection
     {
-        return collect(scandir(lang_path()))->filter(function (string $fileName) {
-            return $fileName !== '.' && $fileName !== '..' && is_dir(lang_path($fileName));
-        });
+        return collect(scandir(lang_path()))->filter(
+            fn(string $fileName) => $fileName !== '.' && $fileName !== '..' && is_dir(lang_path($fileName))
+        );
     }
 
     private function generateFile(string $name, string $lang)

@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Lang;
 
 class PhpFileGenerator extends TranslationGenerator
 {
-    /** @var string */
-    private $targetPath;
+    private string $targetPath;
 
     public function generate()
     {
@@ -18,11 +17,11 @@ class PhpFileGenerator extends TranslationGenerator
             mkdir($this->targetPath);
         }
 
-        $this->getTranslationsFiles()->filter(function (string $fileName) {
-            return $fileName !== '.' && $fileName !== '..';
-        })->each(function (string $fileName) {
-            $this->generateSingle($fileName);
-        });
+        $this->getTranslationsFiles()->filter(
+            fn(string $fileName) => $fileName !== '.' && $fileName !== '..'
+        )->each(
+            fn(string $fileName) => $this->generateSingle($fileName)
+        );
     }
 
     public function fileContent(array $translations = []): string
