@@ -2,21 +2,15 @@
 
 namespace Krzar\LaravelTranslationGenerator\Services\Generators;
 
-use Illuminate\Support\Facades\Lang;
-
 abstract class TranslationGenerator
 {
-    /** @var string */
-    protected $lang;
+    protected string $lang;
 
-    /** @var string */
-    protected $fallback;
+    protected string $fallback;
 
-    /** @var bool */
-    protected $overwrite;
+    protected bool $overwrite;
 
-    /** @var bool */
-    protected $clearValues;
+    protected bool $clearValues;
 
     public function setup(string $lang, string $fallback, bool $overwrite, bool $clearValues): TranslationGenerator
     {
