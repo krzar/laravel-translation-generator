@@ -52,7 +52,7 @@ abstract class TranslationGenerator
                     $currentTranslations[$key]
                 );
             } else {
-                $fixedTranslation[$key] = $currentTranslations[$key] ?? $value;
+                $fixedTranslation[$key] = $currentTranslations[$key] ?? ($this->clearValues ? '' : $value);
             }
         }
 

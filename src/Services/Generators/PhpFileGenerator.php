@@ -45,7 +45,7 @@ class PhpFileGenerator extends TranslationGenerator
         $translations = $this->getTranslations($this->fallback, $fileName);
         $currentTranslations = $this->getTranslations($this->lang, $fileName);
 
-        if (!$this->overwrite && !$this->clearValues && $currentTranslations) {
+        if (!$this->overwrite && $currentTranslations) {
             $translations = $this->fixWithCurrentTranslations($translations, $currentTranslations);
         } else if ($this->clearValues) {
             $translations = $this->clearTranslationsValues($translations);

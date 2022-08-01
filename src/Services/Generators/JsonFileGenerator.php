@@ -12,7 +12,7 @@ class JsonFileGenerator extends TranslationGenerator
             $targetPath = lang_path("$this->lang.json");
             $currentTranslations = $this->getTranslations($this->lang);
 
-            if (!$this->overwrite && !$this->clearValues && $currentTranslations) {
+            if (!$this->overwrite && $currentTranslations) {
                 $translations = $this->fixWithCurrentTranslations($translations, $currentTranslations);
             } else if ($this->clearValues) {
                 $translations = $this->clearTranslationsValues($translations);
