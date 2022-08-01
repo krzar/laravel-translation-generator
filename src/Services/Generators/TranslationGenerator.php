@@ -2,6 +2,8 @@
 
 namespace Krzar\LaravelTranslationGenerator\Services\Generators;
 
+use Illuminate\Support\Collection;
+
 abstract class TranslationGenerator
 {
     protected string $lang;
@@ -24,34 +26,33 @@ abstract class TranslationGenerator
 
     public abstract function generate();
 
-    protected function clearTranslationsValues(array $translations): array
+    protected function clearTranslationsValues(Collection $translations): Collection
     {
-        foreach ($translations as $key => $value) {
-            if (is_array($value)) {
-                $clearedTranslations[$key] = $this->clearTranslationsValues($value);
-            } else {
-                $clearedTranslations[$key] = '';
+        return $translations->map(function (string|array $value) {
+            if (is_string($value)) {
+                return '';
             }
-        }
 
-        return $clearedTranslations ?? [];
+            return $this->clearTranslationsValues(collect($value));
+        });
     }
 
-    protected function fixWithCurrentTranslations(array $translations, array $currentTranslations): array
+    protected function fixWithCurrentTranslations(
+        Collection $translations,
+        Collection $currentTranslations
+    ): Collection
     {
-        foreach ($translations as $key => $value) {
-            if (is_array($value)) {
-                $fixedTranslation[$key] = $this->fixWithCurrentTranslations(
-                    $value,
-                    $currentTranslations[$key]
-                );
-            } else {
-                $fixedTranslation[$key] = $currentTranslations[$key] ?? ($this->clearValues ? '' : $value);
+        return $translations->map(function (string|array $value, string $key) use ($currentTranslations) {
+            if (is_string($value)) {
+                return $currentTranslations->get($key) ?: ($this->clearValues ? '' : $value);
             }
-        }
 
-        return $fixedTranslation ?? [];
+            return $this->fixWithCurrentTranslations(
+                collect($value),
+                collect($currentTranslations->get($key))
+            );
+        });
     }
 
-    protected abstract function getTranslations(string $locale, ?string $key = null): ?array;
+    protected abstract function getTranslations(string $locale, ?string $key = null): ?Collection;
 }

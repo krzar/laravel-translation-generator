@@ -2,6 +2,8 @@
 
 namespace Krzar\LaravelTranslationGenerator\Services\Generators;
 
+use Illuminate\Support\Collection;
+
 class JsonFileGenerator extends TranslationGenerator
 {
     public function generate()
@@ -22,10 +24,10 @@ class JsonFileGenerator extends TranslationGenerator
         }
     }
 
-    protected function getTranslations(string $locale, ?string $key = null): ?array
+    protected function getTranslations(string $locale, ?string $key = null): ?Collection
     {
         $path = lang_path("$locale.json");
 
-        return file_exists($path) ? json_decode(file_get_contents($path), true) : null;
+        return file_exists($path) ? collect(json_decode(file_get_contents($path), true)) : null;
     }
 }

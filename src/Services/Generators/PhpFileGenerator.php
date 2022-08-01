@@ -24,13 +24,13 @@ class PhpFileGenerator extends TranslationGenerator
         );
     }
 
-    public function fileContent(array $translations = []): string
+    public function fileContent(?Collection $translations = null): string
     {
         return sprintf(
             '<?php%sreturn [%s%s];',
             PHP_EOL . PHP_EOL,
             PHP_EOL,
-            $this->translationsToString($translations)
+            $translations ? $this->translationsToString($translations) : ''
         );
     }
 
@@ -50,33 +50,30 @@ class PhpFileGenerator extends TranslationGenerator
             $translations = $this->clearTranslationsValues($translations);
         }
 
-        file_put_contents($this->targetPath . '/' . $fileName, $this->fileContent($translations));
+        file_put_contents("$this->targetPath/$fileName", $this->fileContent($translations));
     }
 
-    private function translationsToString(array $translations, int $level = 1): string
+    private function translationsToString(Collection $translations, int $level = 1): string
     {
         $tabs = sprintf("%'\t{$level}s", '');
-        $string = '';
 
-        foreach ($translations as $key => $value) {
-            if (is_array($value)) {
-                $string .= sprintf(
+        return $translations->reduce(function (string $string, mixed $value, string $key) use ($level, $tabs) {
+            if (is_string($value)) {
+                return $string . sprintf("$tabs\"%s\" => \"%s\",\n", $key, $value);
+            }
+
+            return $string . sprintf(
                     "$tabs\"%s\" => [\n%s$tabs],\n",
                     $key,
-                    $this->translationsToString($value, $level + 1)
+                    $this->translationsToString(collect($value), $level + 1)
                 );
-            } else {
-                $string .= sprintf("$tabs\"%s\" => \"%s\",\n", $key, $value);
-            }
-        }
-
-        return $string;
+        }, '');
     }
 
-    protected function getTranslations(string $locale, ?string $key = null): ?array
+    protected function getTranslations(string $locale, ?string $key = null): ?Collection
     {
         $translations = Lang::get(str_replace('.php', '', $key), [], $locale);
 
-        return $translations !== '' ? $translations : null;
+        return $translations !== '' ? collect($translations) : null;
     }
 }
