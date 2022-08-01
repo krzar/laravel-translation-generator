@@ -1,4 +1,6 @@
 # Laravel Translation Generator
+!\[license mit\](https://badgen.net/github/license/krzar/laravel-translation-generator)
+!\[release\](https://badgen.net/github/release/krzar/laravel-translation-generator)
 
 This package allows you to:
 - Generate translation files for the specified language,
@@ -7,8 +9,9 @@ This package allows you to:
 
 ## Supports
 
-- Laravel 8+
-- PHP 7.3+
+| Laravel Version | Package Version | Supported          |
+|-----------------|-----------------|--------------------|
+| 8.x             | 1.0.x           | :white_check_mark: |
 
 ## Installation
 
