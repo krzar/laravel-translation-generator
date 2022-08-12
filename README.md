@@ -64,7 +64,7 @@ php artisan make:translation es --clear-values --overwrite
 Generate new php translation file for every language.
 
 ```bash
-php artisan male:translation-file common
+php artisan make:translation-file common
 ```
 
 This will generate new php file `common.php` in every language folder.
