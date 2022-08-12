@@ -36,7 +36,13 @@ class PhpFileGenerator extends TranslationGenerator
 
     private function getTranslationsFiles(): Collection
     {
-        return collect(scandir(lang_path($this->fallback)));
+        $path = lang_path($this->fallback);
+
+        if (!file_exists($path)) {
+            return collect(scandir($path));
+        }
+
+        return collect();
     }
 
     private function generateSingle(string $fileName)
