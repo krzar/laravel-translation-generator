@@ -13,7 +13,7 @@ This package allows you to:
 | Laravel Version | Package Version | Supported          |
 |-----------------|-----------------|--------------------|
 | 9.x             | v2.x            | :white_check_mark: |
-| 8.x             | v1.x            | :white_check_mark: |
+| 8.x             | v1.x            | :x:                |
 
 ## Installation
 
