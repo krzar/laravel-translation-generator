@@ -2,6 +2,7 @@
     "name": "krzar/laravel-translation-generator",
     "description": "Translations generator for laravel apps.",
     "license": "MIT",
+    "version": "v2.0.1",
     "authors": [
         {
             "name": "Krystian Zaręba"
