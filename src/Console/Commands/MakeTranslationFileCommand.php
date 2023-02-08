@@ -10,7 +10,7 @@ class MakeTranslationFileCommand extends Command
     protected $signature = 'make:translation-file {name}';
 
     protected $description = 'Create a new translation file for every lang';
-    
+
     public function __construct(
         private MakeTranslationFIleService $makeTranslationFIleService
     )

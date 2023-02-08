@@ -13,7 +13,7 @@ class MakeTranslationFIleService
     {
     }
 
-    public function generate(string $name)
+    public function generate(string $name): void
     {
         $this->getLanguages()->each(
             fn(string $lang) => $this->generateFile($name, $lang)
@@ -27,10 +27,10 @@ class MakeTranslationFIleService
         );
     }
 
-    private function generateFile(string $name, string $lang)
+    private function generateFile(string $name, string $lang): void
     {
         $path = lang_path("$lang/$name.php");
 
-        file_put_contents($path, $this->phpFileGenerator->fileContent());
+        file_put_contents($path, $this->phpFileGenerator->parseContent());
     }
 }
