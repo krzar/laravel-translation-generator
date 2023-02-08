@@ -3,6 +3,7 @@
 namespace Krzar\LaravelTranslationGenerator\Services\Generators;
 
 use Illuminate\Support\Collection;
+use Krzar\LaravelTranslationGenerator\Exceptions\FallbackLanguageFileNotExistsException;
 use Krzar\LaravelTranslationGenerator\Services\TranslationsFixer;
 
 abstract class TranslationGenerator
@@ -14,6 +15,8 @@ abstract class TranslationGenerator
     protected bool $overwrite;
 
     protected bool $clearValues;
+
+    protected ?string $currentFileName = null;
 
     public function setup(
         string $lang,
@@ -30,9 +33,20 @@ abstract class TranslationGenerator
         return $this;
     }
 
+    /**
+     * @throws FallbackLanguageFileNotExistsException
+     */
     protected function generateSingle(): void
     {
         $translations = $this->getTranslations($this->fallback);
+
+        if($translations === null) {
+            throw new FallbackLanguageFileNotExistsException(
+                $this->fallback,
+                $this->currentFileName ?: "$this->fallback.json"
+            );
+        }
+
         $currentTranslations = $this->getTranslations($this->lang);
 
         if (!$this->overwrite && $currentTranslations) {
@@ -48,6 +62,9 @@ abstract class TranslationGenerator
         $this->putToFile($translations);
     }
 
+    /**
+     * @throws FallbackLanguageFileNotExistsException
+     */
     public abstract function generate(): void;
 
     protected abstract function putToFile(Collection $translations): void;

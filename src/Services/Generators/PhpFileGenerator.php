@@ -9,8 +9,6 @@ class PhpFileGenerator extends TranslationGenerator
 {
     private string $targetPath;
 
-    private string $currentFileName;
-
     public function generate(): void
     {
         $this->targetPath = lang_path($this->lang);
