@@ -9,7 +9,7 @@ class TranslationsFixer
     public static function fixToEmpty(Collection $translations): Collection
     {
         return $translations->map(
-            fn(string|array $value) => is_string($value) ? '' : self::fixToEmpty(collect($value))
+            fn (string|array $value) => is_string($value) ? '' : self::fixToEmpty(collect($value))
         );
     }
 
@@ -17,9 +17,8 @@ class TranslationsFixer
         Collection $translations,
         Collection $otherTranslations,
         bool $clearIfNotExists = false
-    ): Collection
-    {
-        return $translations->map(fn(string|array $value, string $key) => self::fixToOtherTranslationSingle(
+    ): Collection {
+        return $translations->map(fn (string|array $value, string $key) => self::fixToOtherTranslationSingle(
             $value,
             $otherTranslations->get($key),
             $clearIfNotExists
@@ -30,10 +29,9 @@ class TranslationsFixer
         string|array $translation,
         string|array|null $otherTranslation,
         bool $clearIfNotExists = false
-    ): string|Collection
-    {
+    ): string|Collection {
         if (is_string($translation)) {
-            if($otherTranslation !== null) {
+            if ($otherTranslation !== null) {
                 return $otherTranslation;
             }
 

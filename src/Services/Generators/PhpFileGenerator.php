@@ -13,7 +13,7 @@ class PhpFileGenerator extends TranslationGenerator
     {
         $this->targetPath = lang_path($this->lang);
 
-        if (!file_exists($this->targetPath)) {
+        if (! file_exists($this->targetPath)) {
             mkdir($this->targetPath);
         }
 
@@ -30,7 +30,7 @@ class PhpFileGenerator extends TranslationGenerator
     {
         return sprintf(
             '<?php%sreturn [%s%s];',
-            PHP_EOL . PHP_EOL,
+            PHP_EOL.PHP_EOL,
             PHP_EOL,
             $translations ? $this->translationsToString($translations) : ''
         );
@@ -40,9 +40,9 @@ class PhpFileGenerator extends TranslationGenerator
     {
         $path = lang_path($this->fallback);
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             return collect(scandir($path))->filter(
-                fn(string $fileName) => $fileName !== '.' && $fileName !== '..'
+                fn (string $fileName) => $fileName !== '.' && $fileName !== '..'
             );
         }
 

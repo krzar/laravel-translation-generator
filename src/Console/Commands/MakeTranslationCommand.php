@@ -16,7 +16,7 @@ class MakeTranslationCommand extends Command
 
     private const GENERATORS = [
         PhpFileGenerator::class,
-        JsonFileGenerator::class
+        JsonFileGenerator::class,
     ];
 
     public function handle(): int

@@ -3,7 +3,6 @@
 namespace Krzar\LaravelTranslationGenerator\Services\Generators;
 
 use Illuminate\Support\Collection;
-use Krzar\LaravelTranslationGenerator\Exceptions\FallbackLanguageFileNotExistsException;
 
 class JsonFileGenerator extends TranslationGenerator
 {
@@ -19,7 +18,8 @@ class JsonFileGenerator extends TranslationGenerator
         return file_exists($path) ? collect(json_decode(file_get_contents($path), true)) : null;
     }
 
-    protected function putToFile(Collection $translations): void {
+    protected function putToFile(Collection $translations): void
+    {
         $targetPath = lang_path("$this->lang.json");
         $content = json_encode($translations, JSON_PRETTY_PRINT);
 

@@ -23,8 +23,7 @@ abstract class TranslationGenerator
         string $fallback,
         bool $overwrite,
         bool $clearValues
-    ): TranslationGenerator
-    {
+    ): TranslationGenerator {
         $this->lang = $lang;
         $this->fallback = $fallback;
         $this->overwrite = $overwrite;
@@ -40,7 +39,7 @@ abstract class TranslationGenerator
     {
         $translations = $this->getTranslations($this->fallback);
 
-        if($translations === null) {
+        if ($translations === null) {
             throw new FallbackLanguageFileNotExistsException(
                 $this->fallback,
                 $this->currentFileName ?: "$this->fallback.json"
@@ -49,13 +48,13 @@ abstract class TranslationGenerator
 
         $currentTranslations = $this->getTranslations($this->lang);
 
-        if (!$this->overwrite && $currentTranslations) {
+        if (! $this->overwrite && $currentTranslations) {
             $translations = TranslationsFixer::fixToOtherTranslations(
                 $translations,
                 $currentTranslations,
                 $this->clearValues
             );
-        } else if ($this->clearValues) {
+        } elseif ($this->clearValues) {
             $translations = TranslationsFixer::fixToEmpty($translations);
         }
 
@@ -65,9 +64,9 @@ abstract class TranslationGenerator
     /**
      * @throws FallbackLanguageFileNotExistsException
      */
-    public abstract function generate(): void;
+    abstract public function generate(): void;
 
-    protected abstract function putToFile(Collection $translations): void;
+    abstract protected function putToFile(Collection $translations): void;
 
-    protected abstract function getTranslations(string $locale): ?Collection;
+    abstract protected function getTranslations(string $locale): ?Collection;
 }

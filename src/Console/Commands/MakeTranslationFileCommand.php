@@ -13,8 +13,7 @@ class MakeTranslationFileCommand extends Command
 
     public function __construct(
         private MakeTranslationFIleService $makeTranslationFIleService
-    )
-    {
+    ) {
         parent::__construct();
     }
 
