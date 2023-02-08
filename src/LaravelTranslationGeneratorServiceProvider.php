@@ -13,7 +13,7 @@ class LaravelTranslationGeneratorServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MakeTranslationCommand::class,
-                MakeTranslationFileCommand::class
+                MakeTranslationFileCommand::class,
             ]);
         }
     }

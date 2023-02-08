@@ -3,6 +3,8 @@
 namespace Krzar\LaravelTranslationGenerator\Services\Generators;
 
 use Illuminate\Support\Collection;
+use Krzar\LaravelTranslationGenerator\Exceptions\FallbackLanguageFileNotExistsException;
+use Krzar\LaravelTranslationGenerator\Services\TranslationsFixer;
 
 abstract class TranslationGenerator
 {
@@ -14,8 +16,14 @@ abstract class TranslationGenerator
 
     protected bool $clearValues;
 
-    public function setup(string $lang, string $fallback, bool $overwrite, bool $clearValues): TranslationGenerator
-    {
+    protected ?string $currentFileName = null;
+
+    public function setup(
+        string $lang,
+        string $fallback,
+        bool $overwrite,
+        bool $clearValues
+    ): TranslationGenerator {
         $this->lang = $lang;
         $this->fallback = $fallback;
         $this->overwrite = $overwrite;
@@ -24,35 +32,41 @@ abstract class TranslationGenerator
         return $this;
     }
 
-    public abstract function generate();
-
-    protected function clearTranslationsValues(Collection $translations): Collection
+    /**
+     * @throws FallbackLanguageFileNotExistsException
+     */
+    protected function generateSingle(): void
     {
-        return $translations->map(function (string|array $value) {
-            if (is_string($value)) {
-                return '';
-            }
+        $translations = $this->getTranslations($this->fallback);
 
-            return $this->clearTranslationsValues(collect($value));
-        });
-    }
-
-    protected function fixWithCurrentTranslations(
-        Collection $translations,
-        Collection $currentTranslations
-    ): Collection
-    {
-        return $translations->map(function (string|array $value, string $key) use ($currentTranslations) {
-            if (is_string($value)) {
-                return $currentTranslations->get($key) ?: ($this->clearValues ? '' : $value);
-            }
-
-            return $this->fixWithCurrentTranslations(
-                collect($value),
-                collect($currentTranslations->get($key))
+        if ($translations === null) {
+            throw new FallbackLanguageFileNotExistsException(
+                $this->fallback,
+                $this->currentFileName ?: "$this->fallback.json"
             );
-        });
+        }
+
+        $currentTranslations = $this->getTranslations($this->lang);
+
+        if (! $this->overwrite && $currentTranslations) {
+            $translations = TranslationsFixer::fixToOtherTranslations(
+                $translations,
+                $currentTranslations,
+                $this->clearValues
+            );
+        } elseif ($this->clearValues) {
+            $translations = TranslationsFixer::fixToEmpty($translations);
+        }
+
+        $this->putToFile($translations);
     }
 
-    protected abstract function getTranslations(string $locale, ?string $key = null): ?Collection;
+    /**
+     * @throws FallbackLanguageFileNotExistsException
+     */
+    abstract public function generate(): void;
+
+    abstract protected function putToFile(Collection $translations): void;
+
+    abstract protected function getTranslations(string $locale): ?Collection;
 }

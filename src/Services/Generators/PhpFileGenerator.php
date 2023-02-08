@@ -9,26 +9,28 @@ class PhpFileGenerator extends TranslationGenerator
 {
     private string $targetPath;
 
-    public function generate()
+    public function generate(): void
     {
         $this->targetPath = lang_path($this->lang);
 
-        if (!file_exists($this->targetPath)) {
+        if (! file_exists($this->targetPath)) {
             mkdir($this->targetPath);
         }
 
-        $this->getTranslationsFiles()->filter(
-            fn(string $fileName) => $fileName !== '.' && $fileName !== '..'
-        )->each(
-            fn(string $fileName) => $this->generateSingle($fileName)
+        $this->getTranslationsFiles()->each(
+            function (string $fileName) {
+                $this->currentFileName = $fileName;
+
+                $this->generateSingle();
+            }
         );
     }
 
-    public function fileContent(?Collection $translations = null): string
+    public function parseContent(?Collection $translations = null): string
     {
         return sprintf(
             '<?php%sreturn [%s%s];',
-            PHP_EOL . PHP_EOL,
+            PHP_EOL.PHP_EOL,
             PHP_EOL,
             $translations ? $this->translationsToString($translations) : ''
         );
@@ -38,25 +40,13 @@ class PhpFileGenerator extends TranslationGenerator
     {
         $path = lang_path($this->fallback);
 
-        if (!file_exists($path)) {
-            return collect(scandir($path));
+        if (! file_exists($path)) {
+            return collect(scandir($path))->filter(
+                fn (string $fileName) => $fileName !== '.' && $fileName !== '..'
+            );
         }
 
         return collect();
-    }
-
-    private function generateSingle(string $fileName)
-    {
-        $translations = $this->getTranslations($this->fallback, $fileName);
-        $currentTranslations = $this->getTranslations($this->lang, $fileName);
-
-        if (!$this->overwrite && $currentTranslations) {
-            $translations = $this->fixWithCurrentTranslations($translations, $currentTranslations);
-        } else if ($this->clearValues) {
-            $translations = $this->clearTranslationsValues($translations);
-        }
-
-        file_put_contents("$this->targetPath/$fileName", $this->fileContent($translations));
     }
 
     private function translationsToString(Collection $translations, int $level = 1): string
@@ -65,21 +55,31 @@ class PhpFileGenerator extends TranslationGenerator
 
         return $translations->reduce(function (string $string, mixed $value, string $key) use ($level, $tabs) {
             if (is_string($value)) {
-                return $string . sprintf("$tabs\"%s\" => \"%s\",\n", $key, $value);
-            }
-
-            return $string . sprintf(
+                $toAppend = sprintf("$tabs\"%s\" => \"%s\",\n", $key, $value);
+            } else {
+                $toAppend = sprintf(
                     "$tabs\"%s\" => [\n%s$tabs],\n",
                     $key,
                     $this->translationsToString(collect($value), $level + 1)
                 );
+            }
+
+            return "{$string}{$toAppend}";
         }, '');
     }
 
-    protected function getTranslations(string $locale, ?string $key = null): ?Collection
+    protected function getTranslations(string $locale): ?Collection
     {
-        $translations = Lang::get(str_replace('.php', '', $key), [], $locale);
+        $translations = Lang::get(str_replace('.php', '', $this->currentFileName), [], $locale);
 
         return $translations !== '' ? collect($translations) : null;
+    }
+
+    protected function putToFile(Collection $translations): void
+    {
+        $targetPath = "$this->targetPath/$this->currentFileName";
+        $content = $this->parseContent($translations);
+
+        file_put_contents($targetPath, $content);
     }
 }

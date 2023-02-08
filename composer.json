@@ -26,5 +26,8 @@
                 "Krzar\\LaravelTranslationGenerator\\LaravelTranslationGeneratorServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "laravel/pint": "^1.4"
     }
 }
