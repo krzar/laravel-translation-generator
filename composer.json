@@ -2,7 +2,7 @@
     "name": "krzar/laravel-translation-generator",
     "description": "Translations generator for laravel apps.",
     "license": "MIT",
-    "version": "v2.1.0",
+    "version": "v2.2.0",
     "authors": [
         {
             "name": "Krystian Zaręba"
@@ -14,10 +14,11 @@
         }
     },
     "require": {
-        "illuminate/console": "^9.0",
-        "illuminate/support": "^9.0",
-        "illuminate/collections": "^9.0",
-        "illuminate/container": "^9.0",
+        "php": "^8.0",
+        "illuminate/console": "^6.0|^7.0|^8.0|^9.0|^10.0",
+        "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0",
+        "illuminate/collections": "^6.0|^7.0|^8.0|^9.0|^10.0",
+        "illuminate/container": "^6.0|^7.0|^8.0|^9.0|^10.0",
         "ext-json": "*"
     },
     "extra": {

@@ -8,12 +8,10 @@ This package allows you to:
 - Generate new translation files for each language,
 - Completing missing keys for translations
 
-## Supports
+## Requirements
 
-| Laravel Version | Package Version | Supported          |
-|-----------------|-----------------|--------------------|
-| 9.x             | v2.x            | :white_check_mark: |
-| 8.x             | v1.x            | :x:                |
+- Laravel 6+
+- PHP 8.0+
 
 ## Installation
 
