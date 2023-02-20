@@ -40,7 +40,7 @@ class PhpFileGenerator extends TranslationGenerator
     {
         $path = lang_path($this->fallback);
 
-        if (! file_exists($path)) {
+        if (file_exists($path)) {
             return collect(scandir($path))->filter(
                 fn (string $fileName) => $fileName !== '.' && $fileName !== '..'
             );
