@@ -34,6 +34,9 @@ Files and keys will be copied based on the fallback locale specified in the app 
 
 You can change fallback locale.
 
+**If you have published any translations from other packages the command will ask you if you want to generate
+new language translations for them as well.**
+
 ```bash
 php artisan make:translation es --fallback=de
 ```
@@ -65,4 +68,4 @@ Generate new php translation file for every language.
 php artisan make:translation-file common
 ```
 
-This will generate new php file `common.php` in every language folder.
+This will generate new php file `common.php` in every language folder (except packages translations folders).
