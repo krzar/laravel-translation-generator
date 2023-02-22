@@ -4,6 +4,8 @@ namespace Krzar\LaravelTranslationGenerator\Services\Generators;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Lang;
+use Krzar\LaravelTranslationGenerator\Exceptions\FallbackLanguageFileNotExistsException;
+use Krzar\LaravelTranslationGenerator\Services\TranslationFilesFinder;
 
 class PhpFileGenerator extends TranslationGenerator
 {
@@ -11,19 +13,11 @@ class PhpFileGenerator extends TranslationGenerator
 
     public function generate(): void
     {
-        $this->targetPath = lang_path($this->lang);
+        $this->generateFiles();
 
-        if (! file_exists($this->targetPath)) {
-            mkdir($this->targetPath);
+        if ($this->generatePackagesTranslations) {
+            $this->generatePackagesFiles();
         }
-
-        $this->getTranslationsFiles()->each(
-            function (string $fileName) {
-                $this->currentFileName = $fileName;
-
-                $this->generateSingle();
-            }
-        );
     }
 
     public function parseContent(?Collection $translations = null): string
@@ -36,17 +30,40 @@ class PhpFileGenerator extends TranslationGenerator
         );
     }
 
-    private function getTranslationsFiles(): Collection
+    /**
+     * @throws FallbackLanguageFileNotExistsException
+     */
+    private function generatePackagesFiles(): void
     {
-        $path = lang_path($this->fallback);
+        $this->packagesTranslationsService->findPackages()->each(function (string $package) {
+            $this->currentPackage = $package;
+            $this->generateFiles();
+        });
+    }
 
-        if (file_exists($path)) {
-            return collect(scandir($path))->filter(
-                fn (string $fileName) => $fileName !== '.' && $fileName !== '..'
-            );
+    /**
+     * @throws FallbackLanguageFileNotExistsException
+     */
+    private function generateFiles(): void
+    {
+        $this->setTargetPath();
+
+        TranslationFilesFinder::phpFiles($this->fallback, $this->currentPackage)->each(function (string $fileName) {
+            $this->currentFileName = $fileName;
+
+            $this->generateSingle();
+        });
+    }
+
+    private function setTargetPath(): void
+    {
+        $this->targetPath = lang_path(
+            $this->currentPackage ? "vendor/$this->currentPackage/$this->lang" : $this->lang
+        );
+
+        if (! file_exists($this->targetPath)) {
+            mkdir($this->targetPath);
         }
-
-        return collect();
     }
 
     private function translationsToString(Collection $translations, int $level = 1): string
@@ -70,7 +87,9 @@ class PhpFileGenerator extends TranslationGenerator
 
     protected function getTranslations(string $locale): ?Collection
     {
-        $translations = Lang::get(str_replace('.php', '', $this->currentFileName), [], $locale);
+        $path = $this->currentPackage ? "$this->currentPackage::$this->currentFileName" : $this->currentFileName;
+
+        $translations = Lang::get(str_replace('.php', '', $path), [], $locale);
 
         return $translations !== '' ? collect($translations) : null;
     }

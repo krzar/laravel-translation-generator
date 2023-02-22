@@ -7,6 +7,7 @@ use Krzar\LaravelTranslationGenerator\Exceptions\FallbackLanguageFileNotExistsEx
 use Krzar\LaravelTranslationGenerator\Services\Generators\JsonFileGenerator;
 use Krzar\LaravelTranslationGenerator\Services\Generators\PhpFileGenerator;
 use Krzar\LaravelTranslationGenerator\Services\Generators\TranslationGenerator;
+use Krzar\LaravelTranslationGenerator\Services\PackagesTranslationsService;
 
 class MakeTranslationCommand extends Command
 {
@@ -19,6 +20,12 @@ class MakeTranslationCommand extends Command
         JsonFileGenerator::class,
     ];
 
+    public function __construct(
+        private PackagesTranslationsService $packagesTranslationsService
+    ) {
+        parent::__construct();
+    }
+
     public function handle(): int
     {
         $lang = $this->argument('lang');
@@ -26,17 +33,20 @@ class MakeTranslationCommand extends Command
         $overwrite = $this->option('overwrite');
         $clearValues = $this->option('clear-values');
 
+        $generatePackagesTranslations = $this->generatePackagesTranslations();
+
         foreach (self::GENERATORS as $generatorClass) {
             /** @var TranslationGenerator $generator */
-            $generator = new $generatorClass();
+            $generator = new $generatorClass(
+                $lang,
+                $fallback,
+                $overwrite,
+                $clearValues,
+                $generatePackagesTranslations
+            );
 
             try {
-                $generator->setup(
-                    $lang,
-                    $fallback,
-                    $overwrite,
-                    $clearValues
-                )->generate();
+                $generator->generate();
             } catch (FallbackLanguageFileNotExistsException $e) {
                 $this->error($e->getMessage());
 
@@ -47,5 +57,22 @@ class MakeTranslationCommand extends Command
         $this->info("Translations for '$lang' language has been created.");
 
         return self::SUCCESS;
+    }
+
+    private function generatePackagesTranslations(): bool
+    {
+        $packages = $this->packagesTranslationsService->findPackages();
+
+        if ($packages) {
+            $this->info('Translation files were found for the following packages:');
+
+            $packages->each(function (string $package) {
+                $this->line("- $package");
+            });
+
+            return $this->confirm('Do you want to generate files for packages as well?');
+        }
+
+        return false;
     }
 }

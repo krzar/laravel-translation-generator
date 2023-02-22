@@ -4,32 +4,25 @@ namespace Krzar\LaravelTranslationGenerator\Services\Generators;
 
 use Illuminate\Support\Collection;
 use Krzar\LaravelTranslationGenerator\Exceptions\FallbackLanguageFileNotExistsException;
+use Krzar\LaravelTranslationGenerator\Services\PackagesTranslationsService;
 use Krzar\LaravelTranslationGenerator\Services\TranslationsFixer;
 
 abstract class TranslationGenerator
 {
-    protected string $lang;
-
-    protected string $fallback;
-
-    protected bool $overwrite;
-
-    protected bool $clearValues;
-
     protected ?string $currentFileName = null;
 
-    public function setup(
-        string $lang,
-        string $fallback,
-        bool $overwrite,
-        bool $clearValues
-    ): TranslationGenerator {
-        $this->lang = $lang;
-        $this->fallback = $fallback;
-        $this->overwrite = $overwrite;
-        $this->clearValues = $clearValues;
+    protected ?string $currentPackage = null;
 
-        return $this;
+    protected PackagesTranslationsService $packagesTranslationsService;
+
+    public function __construct(
+        protected string $lang = '',
+        protected string $fallback = '',
+        protected bool $overwrite = false,
+        protected bool $clearValues = false,
+        protected bool $generatePackagesTranslations = false
+    ) {
+        $this->packagesTranslationsService = new PackagesTranslationsService();
     }
 
     /**
