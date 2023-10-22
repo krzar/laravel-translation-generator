@@ -113,7 +113,7 @@ class MakeTranslationCommand extends Command
     {
         $overwrite = $this->option('overwrite');
 
-        if ($overwrite === null) {
+        if ($overwrite === false) {
             $overwrite = confirm(
                 label: 'Do you want to overwrite existing translations?',
                 default: false,
@@ -129,7 +129,7 @@ class MakeTranslationCommand extends Command
     {
         $clearValues = $this->option('clear-values');
 
-        if ($clearValues === null) {
+        if ($clearValues === false) {
             $clearValues = confirm(
                 label: 'Do you want to clear existing translations?',
                 default: false,
