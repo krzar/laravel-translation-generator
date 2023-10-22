@@ -9,9 +9,12 @@ use Krzar\LaravelTranslationGenerator\Services\Generators\PhpFileGenerator;
 use Krzar\LaravelTranslationGenerator\Services\Generators\TranslationGenerator;
 use Krzar\LaravelTranslationGenerator\Services\PackagesTranslationsService;
 
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\text;
+
 class MakeTranslationCommand extends Command
 {
-    protected $signature = 'make:translation {lang} {--fallback=} {--overwrite} {--clear-values}';
+    protected $signature = 'make:translation {lang?} {--fallback=} {--overwrite} {--clear-values}';
 
     protected $description = 'Create a new translation files for given lang';
 
@@ -28,10 +31,10 @@ class MakeTranslationCommand extends Command
 
     public function handle(): int
     {
-        $lang = $this->argument('lang');
-        $fallback = $this->option('fallback') ?: config('app.fallback_locale');
-        $overwrite = $this->option('overwrite');
-        $clearValues = $this->option('clear-values');
+        $lang = $this->getLang();
+        $fallback = $this->getFallback();
+        $overwrite = $this->getOverwrite();
+        $clearValues = $this->getClearValues();
 
         $generatePackagesTranslations = $this->generatePackagesTranslations();
 
@@ -74,5 +77,67 @@ class MakeTranslationCommand extends Command
         }
 
         return false;
+    }
+
+    private function getLang(): string
+    {
+        $lang = $this->argument('lang');
+
+        if (! $lang) {
+            $lang = text(
+                label: 'Enter language code',
+                placeholder: 'Example: en, pl',
+                required: true
+            );
+        }
+
+        return $lang;
+    }
+
+    private function getFallback(): string
+    {
+        $fallback = $this->option('fallback');
+
+        if (! $fallback) {
+            $fallback = text(
+                label: 'Enter fallback language code',
+                placeholder: 'Example: en, pl',
+                default: config('app.fallback_locale')
+            );
+        }
+
+        return $fallback;
+    }
+
+    private function getOverwrite(): bool
+    {
+        $overwrite = $this->option('overwrite');
+
+        if ($overwrite === null) {
+            $overwrite = confirm(
+                label: 'Do you want to overwrite existing translations?',
+                default: false,
+                yes: 'Yes, overwrite',
+                no: 'No, skip'
+            );
+        }
+
+        return $overwrite;
+    }
+
+    private function getClearValues(): bool
+    {
+        $clearValues = $this->option('clear-values');
+
+        if ($clearValues === null) {
+            $clearValues = confirm(
+                label: 'Do you want to clear existing translations?',
+                default: false,
+                yes: 'Yes, clear',
+                no: 'No, skip'
+            );
+        }
+
+        return $clearValues;
     }
 }
