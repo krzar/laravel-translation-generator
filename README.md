@@ -10,10 +10,10 @@ This package allows you to:
 
 ## Requirements
 
-| Laravel     | PHP  | Package | Supported          |
-|-------------|------|---------|--------------------|
-| From 10.x   | 8.1+ | 3.x     | :white_check_mark: |
-| 6.x to 10.x | 8.0+ | 2.x     | :white_check_mark: |
+|   Laravel   |  PHP  | Package |     Supported      |
+|:-----------:|:-----:|:-------:|:------------------:|
+|  From 10.x  | 8.1+  |   3.x   | :white_check_mark: |
+| 6.x to 10.x | 8.0+  |   2.x   | :white_check_mark: |
 
 ## Installation
 
@@ -23,7 +23,8 @@ composer require krzar/laravel-translation-generator
 
 ## Usage
 
-#### <span style="color:darkorange">Remember, this package supports Laravel Prompts. So you can skip commands arguments and just answer the questions.</span>
+> [!NOTE]
+> Remember, this package supports Laravel Prompts. So you can skip commands arguments and just answer the questions.
 
 ### Generate new translation
 
