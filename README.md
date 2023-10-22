@@ -3,6 +3,9 @@
 ![release](https://badgen.net/github/release/krzar/laravel-translation-generator/master)
 ![last commit](https://badgen.net/github/last-commit/krzar/laravel-translation-generator)
 
+> [!NOTE]  
+> It's not the newest version of this package, please check master branch.
+
 This package allows you to:
 - Generate translation files for the specified language,
 - Generate new translation files for each language,
@@ -10,13 +13,15 @@ This package allows you to:
 
 ## Requirements
 
-- Laravel 6+
-- PHP 8.0+
+|   Laravel   |  PHP  | Package |     Supported      |
+|:-----------:|:-----:|:-------:|:------------------:|
+|  From 10.x  | 8.1+  |   3.x   | :white_check_mark: |
+| 6.x to 10.x | 8.0+  |   2.x   | :white_check_mark: |
 
 ## Installation
 
 ```bash
-composer require krzar/laravel-translation-generator
+composer require krzar/laravel-translation-generator:^2.0
 ```
 
 ## Usage
