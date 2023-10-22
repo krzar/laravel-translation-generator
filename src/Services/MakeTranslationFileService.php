@@ -5,10 +5,10 @@ namespace Krzar\LaravelTranslationGenerator\Services;
 use Illuminate\Support\Collection;
 use Krzar\LaravelTranslationGenerator\Services\Generators\PhpFileGenerator;
 
-class MakeTranslationFIleService
+class MakeTranslationFileService
 {
     public function __construct(
-        private PhpFileGenerator $phpFileGenerator
+        private readonly PhpFileGenerator $phpFileGenerator
     ) {
     }
 
