@@ -11,7 +11,7 @@ class TranslationFilesFinder
 
     private const JSON_EXT = '.json';
 
-    public static function phpFiles(string $lang, ?string $package = null): Collection
+    public static function phpFiles(string $lang, string $package = null): Collection
     {
         if ($package) {
             $path = lang_path("vendor/$package/$lang");
@@ -26,7 +26,7 @@ class TranslationFilesFinder
         return collect();
     }
 
-    public static function jsonFile(string $lang, ?string $package = null): string
+    public static function jsonFile(string $lang, string $package = null): string
     {
         if ($package) {
             return lang_path("vendor/$package/$lang".self::JSON_EXT);

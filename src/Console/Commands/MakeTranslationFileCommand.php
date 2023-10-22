@@ -3,7 +3,7 @@
 namespace Krzar\LaravelTranslationGenerator\Console\Commands;
 
 use Illuminate\Console\Command;
-use Krzar\LaravelTranslationGenerator\Services\MakeTranslationFIleService;
+use Krzar\LaravelTranslationGenerator\Services\MakeTranslationFileService;
 
 use function Laravel\Prompts\text;
 
@@ -14,7 +14,7 @@ class MakeTranslationFileCommand extends Command
     protected $description = 'Create a new translation file for every lang';
 
     public function __construct(
-        private MakeTranslationFIleService $makeTranslationFIleService
+        private readonly MakeTranslationFileService $makeTranslationFileService
     ) {
         parent::__construct();
     }
@@ -23,7 +23,7 @@ class MakeTranslationFileCommand extends Command
     {
         $fileName = $this->getFileName();
 
-        $this->makeTranslationFIleService->generate($fileName);
+        $this->makeTranslationFileService->generate($fileName);
 
         $this->info("Translation file '$fileName.php' has been created for every language.");
 

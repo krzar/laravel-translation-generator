@@ -24,7 +24,7 @@ class MakeTranslationCommand extends Command
     ];
 
     public function __construct(
-        private PackagesTranslationsService $packagesTranslationsService
+        private readonly PackagesTranslationsService $packagesTranslationsService
     ) {
         parent::__construct();
     }
