@@ -20,7 +20,7 @@ class PhpFileGenerator extends TranslationGenerator
         }
     }
 
-    public function parseContent(Collection $translations = null): string
+    public function parseContent(?Collection $translations = null): string
     {
         return sprintf(
             '<?php%sreturn [%s%s];',

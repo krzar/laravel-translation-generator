@@ -9,8 +9,7 @@ class MakeTranslationFileService
 {
     public function __construct(
         private readonly PhpFileGenerator $phpFileGenerator
-    ) {
-    }
+    ) {}
 
     public function generate(string $name): void
     {
