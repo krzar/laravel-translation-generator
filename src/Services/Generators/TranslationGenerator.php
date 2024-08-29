@@ -22,7 +22,7 @@ abstract class TranslationGenerator
         protected bool $clearValues = false,
         protected bool $generatePackagesTranslations = false
     ) {
-        $this->packagesTranslationsService = new PackagesTranslationsService();
+        $this->packagesTranslationsService = new PackagesTranslationsService;
     }
 
     /**

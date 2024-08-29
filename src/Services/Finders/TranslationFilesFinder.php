@@ -1,6 +1,6 @@
 <?php
 
-namespace Krzar\LaravelTranslationGenerator\Services;
+namespace Krzar\LaravelTranslationGenerator\Services\Finders;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -11,7 +11,7 @@ class TranslationFilesFinder
 
     private const JSON_EXT = '.json';
 
-    public static function phpFiles(string $lang, string $package = null): Collection
+    public static function phpFiles(string $lang, ?string $package = null): Collection
     {
         if ($package) {
             $path = lang_path("vendor/$package/$lang");
@@ -26,12 +26,23 @@ class TranslationFilesFinder
         return collect();
     }
 
-    public static function jsonFile(string $lang, string $package = null): string
+    public static function jsonFile(string $lang, ?string $package = null): string
     {
         if ($package) {
             return lang_path("vendor/$package/$lang".self::JSON_EXT);
         }
 
         return lang_path($lang.self::JSON_EXT);
+    }
+
+    public static function jsonFiles(?string $package = null): Collection
+    {
+        $path = $package ? lang_path("vendor/$package") : lang_path();
+
+        if (file_exists($path)) {
+            return collect(scandir($path))->filter(fn (string $file) => Str::endsWith($file, self::JSON_EXT));
+        }
+
+        return collect();
     }
 }

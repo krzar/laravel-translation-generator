@@ -10,6 +10,7 @@ use Krzar\LaravelTranslationGenerator\Services\Generators\TranslationGenerator;
 use Krzar\LaravelTranslationGenerator\Services\PackagesTranslationsService;
 
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\info;
 use function Laravel\Prompts\text;
 
 class MakeTranslationCommand extends Command
@@ -57,7 +58,7 @@ class MakeTranslationCommand extends Command
             }
         }
 
-        $this->info("Translations for '$lang' language has been created.");
+        info("Translations for '$lang' language has been created.");
 
         return self::SUCCESS;
     }
@@ -67,13 +68,13 @@ class MakeTranslationCommand extends Command
         $packages = $this->packagesTranslationsService->findPackages();
 
         if ($packages) {
-            $this->info('Translation files were found for the following packages:');
+            info('Translation files were found for the following packages:');
 
             $packages->each(function (string $package) {
                 $this->line("- $package");
             });
 
-            return $this->confirm('Do you want to generate files for packages as well?');
+            return confirm('Do you want to generate files for packages as well?');
         }
 
         return false;
