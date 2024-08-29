@@ -34,4 +34,15 @@ class TranslationFilesFinder
 
         return lang_path($lang.self::JSON_EXT);
     }
+
+    public static function jsonFiles(?string $package = null): Collection
+    {
+        $path = $package ? lang_path("vendor/$package") : lang_path();
+
+        if (file_exists($path)) {
+            return collect(scandir($path))->filter(fn (string $file) => Str::endsWith($file, self::JSON_EXT));
+        }
+
+        return collect();
+    }
 }

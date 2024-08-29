@@ -10,6 +10,10 @@ class JsonFileGenerator extends TranslationGenerator
 {
     public function generate(): void
     {
+        if ($this->filesNotExists()) {
+            return;
+        }
+
         $this->generateSingle();
 
         if ($this->generatePackagesTranslations) {
@@ -41,5 +45,10 @@ class JsonFileGenerator extends TranslationGenerator
             $this->currentPackage = $package;
             $this->generateSingle();
         });
+    }
+
+    private function filesNotExists(): bool
+    {
+        return TranslationFilesFinder::jsonFiles($this->currentPackage)->isEmpty();
     }
 }
