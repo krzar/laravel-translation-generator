@@ -1,6 +1,6 @@
 <?php
 
-namespace Krzar\LaravelTranslationGenerator\Services;
+namespace Krzar\LaravelTranslationGenerator\Services\Finders;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;

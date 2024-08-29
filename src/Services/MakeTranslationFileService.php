@@ -3,25 +3,24 @@
 namespace Krzar\LaravelTranslationGenerator\Services;
 
 use Illuminate\Support\Collection;
+use Krzar\LaravelTranslationGenerator\Services\Finders\LanguagesFinder;
 use Krzar\LaravelTranslationGenerator\Services\Generators\PhpFileGenerator;
 
 class MakeTranslationFileService
 {
     public function __construct(
-        private readonly PhpFileGenerator $phpFileGenerator
+        private readonly PhpFileGenerator $phpFileGenerator,
+        private readonly LanguagesFinder $languagesFinder
     ) {}
 
-    public function generate(string $name): void
+    public function generate(string $name, Collection $languages): void
     {
-        $this->getLanguages()->each(
-            fn (string $lang) => $this->generateFile($name, $lang)
-        );
-    }
+        if ($languages->isEmpty()) {
+            $languages = $this->languagesFinder->getAvailableLanguages();
+        }
 
-    private function getLanguages(): Collection
-    {
-        return collect(scandir(lang_path()))->filter(
-            fn (string $fileName) => $fileName !== '.' && $fileName !== '..' && is_dir(lang_path($fileName))
+        $languages->each(
+            fn (string $lang) => $this->generateFile($name, $lang)
         );
     }
 

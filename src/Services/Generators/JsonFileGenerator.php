@@ -4,7 +4,7 @@ namespace Krzar\LaravelTranslationGenerator\Services\Generators;
 
 use Illuminate\Support\Collection;
 use Krzar\LaravelTranslationGenerator\Exceptions\FallbackLanguageFileNotExistsException;
-use Krzar\LaravelTranslationGenerator\Services\TranslationFilesFinder;
+use Krzar\LaravelTranslationGenerator\Services\Finders\TranslationFilesFinder;
 
 class JsonFileGenerator extends TranslationGenerator
 {
