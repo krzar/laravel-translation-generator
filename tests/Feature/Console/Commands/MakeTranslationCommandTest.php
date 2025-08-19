@@ -159,5 +159,5 @@ class MakeTranslationCommandTest extends TestCase
             ['getOverwrite'],
             ['getClearValues'],
         ];
-    }
+
 }
