@@ -10,7 +10,7 @@ readonly class MakeTranslationFileService
 {
     public function __construct(
         private PhpFileGenerator $phpFileGenerator,
-        private LanguagesFinder  $languagesFinder
+        private LanguagesFinder $languagesFinder
     ) {}
 
     public function generate(string $name, Collection $languages): void

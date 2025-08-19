@@ -18,6 +18,11 @@
             "Krzar\\LaravelTranslationGenerator\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Krzar\\LaravelTranslationGenerator\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "php": "^8.2",
         "illuminate/console": "^11.0|^12.0",
@@ -35,6 +40,8 @@
         }
     },
     "require-dev": {
-        "laravel/pint": "^1.4"
+        "laravel/pint": "^1.4",
+        "phpunit/phpunit": "^11.0",
+        "mockery/mockery": "^1.6"
     }
 }

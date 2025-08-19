@@ -32,7 +32,7 @@ class TranslationsFixer
     ): string|Collection {
         if (is_string($translation)) {
             if ($otherTranslation !== null) {
-                return $otherTranslation;
+                return is_array($otherTranslation) ? collect($otherTranslation) : $otherTranslation;
             }
 
             return $clearIfNotExists ? '' : $translation;
