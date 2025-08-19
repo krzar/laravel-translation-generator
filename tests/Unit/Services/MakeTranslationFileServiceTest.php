@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class MakeTranslationFileServiceTest extends TestCase
 {
     #[Test]
-    public function service_is_readonly(): void
+    public function serviceIsReadonly(): void
     {
         $reflection = new \ReflectionClass(MakeTranslationFileService::class);
 
@@ -21,7 +21,7 @@ class MakeTranslationFileServiceTest extends TestCase
     }
 
     #[Test]
-    public function constructor_injects_correct_dependencies(): void
+    public function constructorInjectsCorrectDependencies(): void
     {
         $reflection = new \ReflectionClass(MakeTranslationFileService::class);
         $constructor = $reflection->getConstructor();
@@ -39,7 +39,7 @@ class MakeTranslationFileServiceTest extends TestCase
     }
 
     #[Test]
-    public function generate_method_exists(): void
+    public function generateMethodExists(): void
     {
         $this->assertTrue(method_exists(MakeTranslationFileService::class, 'generate'));
 
@@ -50,7 +50,7 @@ class MakeTranslationFileServiceTest extends TestCase
 
     #[Test]
     #[DataProvider('generateParametersDataProvider')]
-    public function generate_method_has_correct_parameters(int $parameterIndex, string $expectedName, string $expectedType): void
+    public function generateMethodHasCorrectParameters(int $parameterIndex, string $expectedName, string $expectedType): void
     {
         $reflection = new \ReflectionMethod(MakeTranslationFileService::class, 'generate');
         $parameters = $reflection->getParameters();
@@ -71,7 +71,7 @@ class MakeTranslationFileServiceTest extends TestCase
     }
 
     #[Test]
-    public function service_has_private_generate_file_method(): void
+    public function serviceHasPrivateGenerateFileMethod(): void
     {
         $reflection = new \ReflectionClass(MakeTranslationFileService::class);
 

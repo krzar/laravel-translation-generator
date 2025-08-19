@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 class LanguagesFinderTest extends TestCase
 {
     #[Test]
-    public function get_available_languages_method_exists(): void
+    public function getAvailableLanguagesMethodExists(): void
     {
         $this->assertTrue(method_exists(LanguagesFinder::class, 'getAvailableLanguages'));
 
@@ -21,7 +21,7 @@ class LanguagesFinderTest extends TestCase
     }
 
     #[Test]
-    public function finder_has_ignored_directories_constant(): void
+    public function finderHasIgnoredDirectoriesConstant(): void
     {
         $reflection = new \ReflectionClass(LanguagesFinder::class);
 
@@ -35,7 +35,7 @@ class LanguagesFinderTest extends TestCase
 
     #[Test]
     #[DataProvider('ignoredDirectoriesDataProvider')]
-    public function ignored_directories_constant_contains_correct_values(string $directory): void
+    public function ignoredDirectoriesConstantContainsCorrectValues(string $directory): void
     {
         $reflection = new \ReflectionClass(LanguagesFinder::class);
         $constant = $reflection->getConstant('IGNORED_DIRECTORIES');
@@ -52,7 +52,7 @@ class LanguagesFinderTest extends TestCase
     }
 
     #[Test]
-    public function finder_has_private_filter_directory_method(): void
+    public function finderHasPrivateFilterDirectoryMethod(): void
     {
         $reflection = new \ReflectionClass(LanguagesFinder::class);
 
@@ -69,7 +69,7 @@ class LanguagesFinderTest extends TestCase
     }
 
     #[Test]
-    public function finder_can_be_instantiated(): void
+    public function finderCanBeInstantiated(): void
     {
         $finder = new LanguagesFinder;
 
@@ -77,7 +77,7 @@ class LanguagesFinderTest extends TestCase
     }
 
     #[Test]
-    public function finder_uses_correct_method_visibilities(): void
+    public function finderUsesCorrectMethodVisibilities(): void
     {
         $reflection = new \ReflectionClass(LanguagesFinder::class);
 

@@ -33,7 +33,7 @@ class MakeTranslationCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_has_correct_signature(): void
+    public function commandHasCorrectSignature(): void
     {
         $reflection = new \ReflectionClass($this->command);
         $signatureProperty = $reflection->getProperty('signature');
@@ -46,7 +46,7 @@ class MakeTranslationCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_has_correct_description(): void
+    public function commandHasCorrectDescription(): void
     {
         $this->assertEquals(
             'Create a new translation files for given lang',
@@ -56,7 +56,7 @@ class MakeTranslationCommandTest extends TestCase
 
     #[Test]
     #[DataProvider('commandOptionsDataProvider')]
-    public function command_has_correct_options(string $optionName, bool $shouldExist): void
+    public function commandHasCorrectOptions(string $optionName, bool $shouldExist): void
     {
         $definition = $this->command->getDefinition();
 
@@ -79,7 +79,7 @@ class MakeTranslationCommandTest extends TestCase
 
     #[Test]
     #[DataProvider('commandArgumentsDataProvider')]
-    public function command_has_correct_arguments(string $argumentName, bool $shouldExist): void
+    public function commandHasCorrectArguments(string $argumentName, bool $shouldExist): void
     {
         $definition = $this->command->getDefinition();
 
@@ -100,7 +100,7 @@ class MakeTranslationCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_uses_correct_generators(): void
+    public function commandUsesCorrectGenerators(): void
     {
         $reflection = new \ReflectionClass($this->command);
         $generatorsConstant = $reflection->getConstant('GENERATORS');
@@ -111,7 +111,7 @@ class MakeTranslationCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_injects_packages_translations_service(): void
+    public function commandInjectsPackagesTranslationsService(): void
     {
         $reflection = new \ReflectionClass($this->command);
         $constructor = $reflection->getConstructor();
@@ -123,13 +123,13 @@ class MakeTranslationCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_extends_illuminate_command(): void
+    public function commandExtendsIlluminateCommand(): void
     {
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
     #[Test]
-    public function command_has_handle_method(): void
+    public function commandHasHandleMethod(): void
     {
         $this->assertTrue(method_exists($this->command, 'handle'));
 
@@ -140,7 +140,7 @@ class MakeTranslationCommandTest extends TestCase
 
     #[Test]
     #[DataProvider('privateMethodsDataProvider')]
-    public function command_has_private_methods(string $methodName): void
+    public function commandHasPrivateMethods(string $methodName): void
     {
         $reflection = new \ReflectionClass($this->command);
 

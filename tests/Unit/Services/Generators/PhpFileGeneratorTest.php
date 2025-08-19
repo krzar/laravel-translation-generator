@@ -20,7 +20,7 @@ class PhpFileGeneratorTest extends TestCase
 
     #[Test]
     #[DataProvider('parseContentDataProvider')]
-    public function parse_content_returns_correct_format(?Collection $translations, string $expected): void
+    public function parseContentReturnsCorrectFormat(?Collection $translations, string $expected): void
     {
         $result = $this->generator->parseContent($translations);
 
@@ -67,7 +67,7 @@ class PhpFileGeneratorTest extends TestCase
 
     #[Test]
     #[DataProvider('translationsWithSpecialCharactersDataProvider')]
-    public function parse_content_handles_special_characters(Collection $translations, string $expected): void
+    public function parseContentHandlesSpecialCharacters(Collection $translations, string $expected): void
     {
         $result = $this->generator->parseContent($translations);
 
@@ -93,7 +93,7 @@ class PhpFileGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function parse_content_with_empty_nested_array(): void
+    public function parseContentWithEmptyNestedArray(): void
     {
         $translations = collect([
             'empty_section' => [],
@@ -108,7 +108,7 @@ class PhpFileGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function parse_content_maintains_key_order(): void
+    public function parseContentMaintainsKeyOrder(): void
     {
         $translations = collect([
             'z_key' => 'last',

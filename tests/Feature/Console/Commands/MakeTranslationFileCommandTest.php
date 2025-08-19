@@ -28,7 +28,7 @@ class MakeTranslationFileCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_has_correct_signature(): void
+    public function commandHasCorrectSignature(): void
     {
         $reflection = new \ReflectionClass($this->command);
         $signatureProperty = $reflection->getProperty('signature');
@@ -41,7 +41,7 @@ class MakeTranslationFileCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_has_correct_description(): void
+    public function commandHasCorrectDescription(): void
     {
         $this->assertEquals(
             'Create a new translation file for every lang',
@@ -51,7 +51,7 @@ class MakeTranslationFileCommandTest extends TestCase
 
     #[Test]
     #[DataProvider('commandArgumentsDataProvider')]
-    public function command_has_correct_arguments(string $argumentName, bool $shouldExist): void
+    public function commandHasCorrectArguments(string $argumentName, bool $shouldExist): void
     {
         $definition = $this->command->getDefinition();
 
@@ -72,7 +72,7 @@ class MakeTranslationFileCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_injects_correct_services(): void
+    public function commandInjectsCorrectServices(): void
     {
         $reflection = new \ReflectionClass($this->command);
         $constructor = $reflection->getConstructor();
@@ -88,13 +88,13 @@ class MakeTranslationFileCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_extends_illuminate_command(): void
+    public function commandExtendsIlluminateCommand(): void
     {
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
     #[Test]
-    public function command_has_handle_method(): void
+    public function commandHasHandleMethod(): void
     {
         $this->assertTrue(method_exists($this->command, 'handle'));
 
@@ -105,7 +105,7 @@ class MakeTranslationFileCommandTest extends TestCase
 
     #[Test]
     #[DataProvider('privateMethodsDataProvider')]
-    public function command_has_private_methods(string $methodName): void
+    public function commandHasPrivateMethods(string $methodName): void
     {
         $reflection = new \ReflectionClass($this->command);
 
@@ -124,7 +124,7 @@ class MakeTranslationFileCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_has_no_options(): void
+    public function commandHasNoOptions(): void
     {
         $definition = $this->command->getDefinition();
         $options = $definition->getOptions();
@@ -135,7 +135,7 @@ class MakeTranslationFileCommandTest extends TestCase
     }
 
     #[Test]
-    public function command_name_argument_is_optional(): void
+    public function commandNameArgumentIsOptional(): void
     {
         $definition = $this->command->getDefinition();
         $nameArgument = $definition->getArgument('name');

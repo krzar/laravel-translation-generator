@@ -42,7 +42,7 @@ class TranslationGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function constructor_sets_properties_correctly(): void
+    public function constructorSetsPropertiesCorrectly(): void
     {
         $generator = new class('en', 'pl', true, true, true) extends TranslationGenerator
         {
@@ -90,7 +90,7 @@ class TranslationGeneratorTest extends TestCase
 
     #[Test]
     #[DataProvider('generateSingleDataProvider')]
-    public function generate_single_works_correctly(
+    public function generateSingleWorksCorrectly(
         string $lang,
         string $fallback,
         bool $overwrite,
@@ -170,7 +170,7 @@ class TranslationGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function generate_single_throws_exception_when_fallback_language_not_exists(): void
+    public function generateSingleThrowsExceptionWhenFallbackLanguageNotExists(): void
     {
         $generator = new class('en', 'nonexistent', false, false, false) extends TranslationGenerator
         {

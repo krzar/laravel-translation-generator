@@ -17,7 +17,7 @@ class JsonFileGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function constructor_sets_properties_correctly(): void
+    public function constructorSetsPropertiesCorrectly(): void
     {
         $generator = new JsonFileGenerator('fr', 'en', true, true, true);
 
@@ -25,13 +25,13 @@ class JsonFileGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function generate_method_exists(): void
+    public function generateMethodExists(): void
     {
         $this->assertTrue(method_exists($this->generator, 'generate'));
     }
 
     #[Test]
-    public function get_translations_method_exists(): void
+    public function getTranslationsMethodExists(): void
     {
         $reflection = new \ReflectionClass($this->generator);
         $method = $reflection->getMethod('getTranslations');
@@ -40,7 +40,7 @@ class JsonFileGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function put_to_file_method_exists(): void
+    public function putToFileMethodExists(): void
     {
         $reflection = new \ReflectionClass($this->generator);
         $method = $reflection->getMethod('putToFile');
@@ -49,7 +49,7 @@ class JsonFileGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function generator_extends_translation_generator(): void
+    public function generatorExtendsTranslationGenerator(): void
     {
         $this->assertInstanceOf(
             \Krzar\LaravelTranslationGenerator\Services\Generators\TranslationGenerator::class,
@@ -58,7 +58,7 @@ class JsonFileGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function generator_implements_required_methods(): void
+    public function generatorImplementsRequiredMethods(): void
     {
         $requiredMethods = ['generate', 'getTranslations', 'putToFile'];
 
