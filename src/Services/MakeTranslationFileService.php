@@ -6,11 +6,11 @@ use Illuminate\Support\Collection;
 use Krzar\LaravelTranslationGenerator\Services\Finders\LanguagesFinder;
 use Krzar\LaravelTranslationGenerator\Services\Generators\PhpFileGenerator;
 
-class MakeTranslationFileService
+readonly class MakeTranslationFileService
 {
     public function __construct(
-        private readonly PhpFileGenerator $phpFileGenerator,
-        private readonly LanguagesFinder $languagesFinder
+        private PhpFileGenerator $phpFileGenerator,
+        private LanguagesFinder  $languagesFinder
     ) {}
 
     public function generate(string $name, Collection $languages): void
