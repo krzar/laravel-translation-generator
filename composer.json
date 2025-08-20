@@ -7,7 +7,7 @@
         "translations-generator"
     ],
     "license": "MIT",
-    "version": "v4.0.0",
+    "version": "v4.0.1",
     "authors": [
         {
             "name": "Krystian Zaręba"
@@ -43,6 +43,7 @@
         "laravel/pint": "^1.4",
         "phpunit/phpunit": "^11.0",
         "mockery/mockery": "^1.6",
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-mockery": "^2.0"
     }
 }

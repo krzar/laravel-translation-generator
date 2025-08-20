@@ -1,9 +1,12 @@
+includes:
+    - vendor/phpstan/phpstan-mockery/extension.neon
+
 parameters:
     paths:
         - src
+        - tests
 
     level: 5
 
     ignoreErrors:
-        - '#Function lang_path not found#'
         - '#Function config not found#'

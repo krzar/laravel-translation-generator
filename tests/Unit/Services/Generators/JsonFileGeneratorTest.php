@@ -3,16 +3,12 @@
 namespace Krzar\LaravelTranslationGenerator\Tests\Unit\Services\Generators;
 
 use Krzar\LaravelTranslationGenerator\Services\Generators\JsonFileGenerator;
-use Krzar\LaravelTranslationGenerator\Services\PackagesTranslationsService;
-use Mockery;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class JsonFileGeneratorTest extends TestCase
 {
     private string $tempLangPath;
-
-    private PackagesTranslationsService $packagesService;
 
     protected function setUp(): void
     {
@@ -23,7 +19,6 @@ class JsonFileGeneratorTest extends TestCase
 
         $GLOBALS['tempLangPath'] = $this->tempLangPath;
 
-        $this->packagesService = Mockery::mock(PackagesTranslationsService::class);
     }
 
     protected function tearDown(): void
@@ -31,7 +26,6 @@ class JsonFileGeneratorTest extends TestCase
         if (is_dir($this->tempLangPath)) {
             $this->removeDirectory($this->tempLangPath);
         }
-        Mockery::close();
         parent::tearDown();
     }
 
@@ -49,10 +43,7 @@ class JsonFileGeneratorTest extends TestCase
             json_encode($fallbackTranslations, JSON_PRETTY_PRINT)
         );
 
-        $this->packagesService->shouldReceive('findPackages')
-            ->andReturn(collect());
-
-        $generator = new JsonFileGenerator('en', 'pl', false, false, false, $this->packagesService);
+        $generator = new JsonFileGenerator('en', 'pl', false, false, false);
         $generator->generate();
 
         $this->assertFileExists($this->tempLangPath.'/en.json');
@@ -69,10 +60,7 @@ class JsonFileGeneratorTest extends TestCase
     public function skips_generation_when_no_json_files_exist(): void
     {
 
-        $this->packagesService->shouldReceive('findPackages')
-            ->andReturn(collect());
-
-        $generator = new JsonFileGenerator('en', 'pl', false, false, false, $this->packagesService);
+        $generator = new JsonFileGenerator('en', 'pl', false, false, false);
         $generator->generate();
 
         $this->assertFileDoesNotExist($this->tempLangPath.'/en.json');
@@ -103,10 +91,7 @@ class JsonFileGeneratorTest extends TestCase
             json_encode($existingTranslations, JSON_PRETTY_PRINT)
         );
 
-        $this->packagesService->shouldReceive('findPackages')
-            ->andReturn(collect());
-
-        $generator = new JsonFileGenerator('en', 'pl', false, false, false, $this->packagesService);
+        $generator = new JsonFileGenerator('en', 'pl', false, false, false);
         $generator->generate();
 
         $generatedContent = json_decode(
