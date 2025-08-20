@@ -19,6 +19,9 @@ class MakeTranslationCommand extends Command
 
     protected $description = 'Create a new translation files for given lang';
 
+    /**
+     * @var array<class-string<TranslationGenerator>>
+     */
     private const GENERATORS = [
         PhpFileGenerator::class,
         JsonFileGenerator::class,
@@ -40,7 +43,6 @@ class MakeTranslationCommand extends Command
         $generatePackagesTranslations = $this->generatePackagesTranslations();
 
         foreach (self::GENERATORS as $generatorClass) {
-            /** @var TranslationGenerator $generator */
             $generator = new $generatorClass(
                 $lang,
                 $fallback,

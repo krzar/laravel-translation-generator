@@ -42,6 +42,7 @@
     "require-dev": {
         "laravel/pint": "^1.4",
         "phpunit/phpunit": "^11.0",
-        "mockery/mockery": "^1.6"
+        "mockery/mockery": "^1.6",
+        "phpstan/phpstan": "^2.1"
     }
 }
