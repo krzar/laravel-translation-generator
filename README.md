@@ -2,6 +2,7 @@
 ![license mit](https://badgen.net/github/license/krzar/laravel-translation-generator)
 ![release](https://badgen.net/github/release/krzar/laravel-translation-generator/master)
 ![last commit](https://badgen.net/github/last-commit/krzar/laravel-translation-generator)
+![checks](https://badgen.net/github/checks/krzar/laravel-translation-generator)
 
 This package allows you to:
 - Generate translation files for the specified language,
@@ -10,10 +11,11 @@ This package allows you to:
 
 ## Requirements
 
-|   Laravel   |  PHP  | Package |     Supported      |
-|:-----------:|:-----:|:-------:|:------------------:|
-|  From 10.x  | 8.1+  |   3.x   | :white_check_mark: |
-| 6.x to 10.x | 8.0+  |   2.x   | :white_check_mark: |
+|   Laravel   | PHP  | Package |     Supported      |
+|:-----------:|:----:|:-------:|:------------------:|
+|  From 11.x  | 8.2+ |   4.x   | :white_check_mark: |
+|  From 10.x  | 8.1+ |   3.x   | :white_check_mark: |
+| 6.x to 10.x | 8.0+ |   2.x   |        :x:         |
 
 ## Installation
 
