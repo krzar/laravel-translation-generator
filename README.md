@@ -1,8 +1,8 @@
 # Laravel Translation Generator
-![license mit](https://badgen.net/github/license/krzar/laravel-translation-generator)
-![release](https://badgen.net/github/release/krzar/laravel-translation-generator/master)
-![last commit](https://badgen.net/github/last-commit/krzar/laravel-translation-generator)
-![checks](https://badgen.net/github/checks/krzar/laravel-translation-generator)
+![GitHub License](https://img.shields.io/github/license/krzar/laravel-translation-generator)
+![GitHub Release](https://img.shields.io/github/v/release/krzar/laravel-translation-generator?cacheSeconds=300)
+![GitHub last commit](https://img.shields.io/github/last-commit/krzar/laravel-translation-generator?cacheSeconds=300)
+![GitHub branch check runs](https://img.shields.io/github/check-runs/krzar/laravel-translation-generator/master?cacheSeconds=300)
 
 This package allows you to:
 - Generate translation files for the specified language,
