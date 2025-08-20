@@ -6,6 +6,7 @@ use Krzar\LaravelTranslationGenerator\Services\Finders\LanguagesFinder;
 use Krzar\LaravelTranslationGenerator\Services\Generators\PhpFileGenerator;
 use Krzar\LaravelTranslationGenerator\Services\MakeTranslationFileService;
 use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -13,9 +14,9 @@ class MakeTranslationFileServiceTest extends TestCase
 {
     private MakeTranslationFileService $service;
 
-    private PhpFileGenerator $phpFileGenerator;
+    private PhpFileGenerator&MockInterface $phpFileGenerator;
 
-    private LanguagesFinder $languagesFinder;
+    private LanguagesFinder&MockInterface $languagesFinder;
 
     private string $tempLangPath;
 
@@ -25,15 +26,6 @@ class MakeTranslationFileServiceTest extends TestCase
 
         $this->tempLangPath = sys_get_temp_dir().'/test_lang_'.uniqid();
         mkdir($this->tempLangPath);
-
-        if (! function_exists('lang_path')) {
-            function lang_path($path = '')
-            {
-                global $tempLangPath;
-
-                return $tempLangPath.($path ? DIRECTORY_SEPARATOR.$path : '');
-            }
-        }
 
         $GLOBALS['tempLangPath'] = $this->tempLangPath;
 
