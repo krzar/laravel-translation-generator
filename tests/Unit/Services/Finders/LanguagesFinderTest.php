@@ -2,89 +2,106 @@
 
 namespace Krzar\LaravelTranslationGenerator\Tests\Unit\Services\Finders;
 
-use Illuminate\Support\Collection;
 use Krzar\LaravelTranslationGenerator\Services\Finders\LanguagesFinder;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class LanguagesFinderTest extends TestCase
 {
-    #[Test]
-    public function getAvailableLanguagesMethodExists(): void
-    {
-        $this->assertTrue(method_exists(LanguagesFinder::class, 'getAvailableLanguages'));
+    private LanguagesFinder $finder;
 
-        $reflection = new \ReflectionMethod(LanguagesFinder::class, 'getAvailableLanguages');
-        $this->assertTrue($reflection->isPublic());
-        $this->assertEquals(Collection::class, $reflection->getReturnType()->getName());
+    private string $tempLangPath;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->tempLangPath = sys_get_temp_dir().'/test_lang_'.uniqid();
+        mkdir($this->tempLangPath);
+
+        $GLOBALS['tempLangPath'] = $this->tempLangPath;
+
+        $this->finder = new LanguagesFinder;
+    }
+
+    protected function tearDown(): void
+    {
+        if (is_dir($this->tempLangPath)) {
+            $this->removeDirectory($this->tempLangPath);
+        }
+        parent::tearDown();
     }
 
     #[Test]
-    public function finderHasIgnoredDirectoriesConstant(): void
+    public function finds_existing_language_directories(): void
     {
-        $reflection = new \ReflectionClass(LanguagesFinder::class);
+        mkdir($this->tempLangPath.'/en');
+        mkdir($this->tempLangPath.'/pl');
+        mkdir($this->tempLangPath.'/de');
 
-        $this->assertTrue($reflection->hasConstant('IGNORED_DIRECTORIES'));
+        file_put_contents($this->tempLangPath.'/en/messages.php', '<?php return [];');
+        file_put_contents($this->tempLangPath.'/pl/messages.php', '<?php return [];');
+        file_put_contents($this->tempLangPath.'/de/messages.php', '<?php return [];');
 
-        $constant = $reflection->getConstant('IGNORED_DIRECTORIES');
-        $this->assertIsArray($constant);
-        $this->assertContains('.', $constant);
-        $this->assertContains('..', $constant);
+        $result = $this->finder->getAvailableLanguages();
+
+        $this->assertCount(3, $result);
+        $this->assertTrue($result->offsetExists('en'));
+        $this->assertTrue($result->offsetExists('pl'));
+        $this->assertTrue($result->offsetExists('de'));
     }
 
     #[Test]
-    #[DataProvider('ignoredDirectoriesDataProvider')]
-    public function ignoredDirectoriesConstantContainsCorrectValues(string $directory): void
+    public function ignores_system_directories(): void
     {
-        $reflection = new \ReflectionClass(LanguagesFinder::class);
-        $constant = $reflection->getConstant('IGNORED_DIRECTORIES');
+        mkdir($this->tempLangPath.'/en');
+        file_put_contents($this->tempLangPath.'/en/messages.php', '<?php return [];');
 
-        $this->assertContains($directory, $constant);
-    }
+        touch($this->tempLangPath.'/some_file.txt');
 
-    public static function ignoredDirectoriesDataProvider(): array
-    {
-        return [
-            'current directory' => ['.'],
-            'parent directory' => ['..'],
-        ];
+        $result = $this->finder->getAvailableLanguages();
+
+        $this->assertCount(1, $result);
+        $this->assertTrue($result->offsetExists('en'));
+        $this->assertFalse($result->contains('some_file.txt'));
     }
 
     #[Test]
-    public function finderHasPrivateFilterDirectoryMethod(): void
+    public function returns_empty_collection_when_no_language_directories(): void
     {
-        $reflection = new \ReflectionClass(LanguagesFinder::class);
+        touch($this->tempLangPath.'/some_file.txt');
 
-        $this->assertTrue($reflection->hasMethod('filterDirectory'));
+        $result = $this->finder->getAvailableLanguages();
 
-        $method = $reflection->getMethod('filterDirectory');
-        $this->assertTrue($method->isPrivate());
-        $this->assertEquals('bool', $method->getReturnType()->getName());
-
-        $parameters = $method->getParameters();
-        $this->assertCount(1, $parameters);
-        $this->assertEquals('directory', $parameters[0]->getName());
-        $this->assertEquals('string', $parameters[0]->getType()->getName());
+        $this->assertCount(0, $result);
     }
 
     #[Test]
-    public function finderCanBeInstantiated(): void
+    public function keys_and_values_are_identical(): void
     {
-        $finder = new LanguagesFinder;
+        mkdir($this->tempLangPath.'/en');
+        mkdir($this->tempLangPath.'/pl');
+        file_put_contents($this->tempLangPath.'/en/messages.php', '<?php return [];');
+        file_put_contents($this->tempLangPath.'/pl/messages.php', '<?php return [];');
 
-        $this->assertInstanceOf(LanguagesFinder::class, $finder);
+        $result = $this->finder->getAvailableLanguages();
+
+        $result->each(function ($value, $key) {
+            $this->assertEquals($key, $value, "Key '$key' should equal value '$value'");
+        });
     }
 
-    #[Test]
-    public function finderUsesCorrectMethodVisibilities(): void
+    private function removeDirectory(string $dir): void
     {
-        $reflection = new \ReflectionClass(LanguagesFinder::class);
+        if (! is_dir($dir)) {
+            return;
+        }
 
-        $publicMethod = $reflection->getMethod('getAvailableLanguages');
-        $this->assertTrue($publicMethod->isPublic());
-
-        $privateMethod = $reflection->getMethod('filterDirectory');
-        $this->assertTrue($privateMethod->isPrivate());
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            $path = $dir.DIRECTORY_SEPARATOR.$file;
+            is_dir($path) ? $this->removeDirectory($path) : unlink($path);
+        }
+        rmdir($dir);
     }
 }

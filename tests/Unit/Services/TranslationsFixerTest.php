@@ -12,7 +12,7 @@ class TranslationsFixerTest extends TestCase
 {
     #[Test]
     #[DataProvider('fixToEmptyDataProvider')]
-    public function fixToEmptyReturnsEmptyValues(Collection $input, Collection $expected): void
+    public function fix_to_empty_returns_empty_values(Collection $input, Collection $expected): void
     {
         $result = TranslationsFixer::fixToEmpty($input);
 
@@ -67,7 +67,7 @@ class TranslationsFixerTest extends TestCase
 
     #[Test]
     #[DataProvider('fixToOtherTranslationsDataProvider')]
-    public function fixToOtherTranslationsWorksCorrectly(
+    public function fix_to_other_translations_works_correctly(
         Collection $translations,
         Collection $otherTranslations,
         bool $clearIfNotExists,
@@ -120,7 +120,7 @@ class TranslationsFixerTest extends TestCase
 
     #[Test]
     #[DataProvider('fixToOtherTranslationSingleDataProvider')]
-    public function fixToOtherTranslationSingleWorksCorrectly(
+    public function fix_to_other_translation_single_works_correctly(
         string|array $translation,
         string|array|null $otherTranslation,
         bool $clearIfNotExists,
@@ -133,7 +133,6 @@ class TranslationsFixerTest extends TestCase
         );
 
         if ($expected instanceof Collection) {
-            $this->assertInstanceOf(Collection::class, $result);
             $this->assertEquals($expected->toArray(), $result->toArray());
         } else {
             $this->assertEquals($expected, $result);
@@ -177,7 +176,7 @@ class TranslationsFixerTest extends TestCase
     }
 
     #[Test]
-    public function fixToEmptyHandlesEmptyCollection(): void
+    public function fix_to_empty_handles_empty_collection(): void
     {
         $result = TranslationsFixer::fixToEmpty(collect());
 
@@ -185,7 +184,7 @@ class TranslationsFixerTest extends TestCase
     }
 
     #[Test]
-    public function fixToOtherTranslationsHandlesEmptyCollections(): void
+    public function fix_to_other_translations_handles_empty_collections(): void
     {
         $result = TranslationsFixer::fixToOtherTranslations(
             collect(),
@@ -197,7 +196,7 @@ class TranslationsFixerTest extends TestCase
     }
 
     #[Test]
-    public function fixToOtherTranslationSingleHandlesEmptyString(): void
+    public function fix_to_other_translation_single_handles_empty_string(): void
     {
         $result = TranslationsFixer::fixToOtherTranslationSingle('', null, false);
 
@@ -205,7 +204,7 @@ class TranslationsFixerTest extends TestCase
     }
 
     #[Test]
-    public function fixToOtherTranslationSingleHandlesEmptyArray(): void
+    public function fix_to_other_translation_single_handles_empty_array(): void
     {
         $result = TranslationsFixer::fixToOtherTranslationSingle([], null, false);
 

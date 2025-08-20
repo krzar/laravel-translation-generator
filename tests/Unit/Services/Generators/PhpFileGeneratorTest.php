@@ -10,19 +10,12 @@ use PHPUnit\Framework\TestCase;
 
 class PhpFileGeneratorTest extends TestCase
 {
-    private PhpFileGenerator $generator;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->generator = new PhpFileGenerator('en', 'pl');
-    }
-
     #[Test]
     #[DataProvider('parseContentDataProvider')]
-    public function parseContentReturnsCorrectFormat(?Collection $translations, string $expected): void
+    public function parse_content_returns_correct_format(?Collection $translations, string $expected): void
     {
-        $result = $this->generator->parseContent($translations);
+        $generator = new PhpFileGenerator('en', 'pl');
+        $result = $generator->parseContent($translations);
 
         $this->assertEquals($expected, $result);
     }
@@ -67,9 +60,10 @@ class PhpFileGeneratorTest extends TestCase
 
     #[Test]
     #[DataProvider('translationsWithSpecialCharactersDataProvider')]
-    public function parseContentHandlesSpecialCharacters(Collection $translations, string $expected): void
+    public function parse_content_handles_special_characters(Collection $translations, string $expected): void
     {
-        $result = $this->generator->parseContent($translations);
+        $generator = new PhpFileGenerator('en', 'pl');
+        $result = $generator->parseContent($translations);
 
         $this->assertEquals($expected, $result);
     }
@@ -93,14 +87,15 @@ class PhpFileGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function parseContentWithEmptyNestedArray(): void
+    public function parse_content_with_empty_nested_array(): void
     {
+        $generator = new PhpFileGenerator('en', 'pl');
         $translations = collect([
             'empty_section' => [],
             'filled_section' => ['key' => 'value'],
         ]);
 
-        $result = $this->generator->parseContent($translations);
+        $result = $generator->parseContent($translations);
 
         $expected = "<?php\n\nreturn [\n\t\"empty_section\" => [\n\t],\n\t\"filled_section\" => [\n\t\t\"key\" => \"value\",\n\t],\n];";
 
@@ -108,15 +103,16 @@ class PhpFileGeneratorTest extends TestCase
     }
 
     #[Test]
-    public function parseContentMaintainsKeyOrder(): void
+    public function parse_content_maintains_key_order(): void
     {
+        $generator = new PhpFileGenerator('en', 'pl');
         $translations = collect([
             'z_key' => 'last',
             'a_key' => 'first',
             'middle_key' => 'middle',
         ]);
 
-        $result = $this->generator->parseContent($translations);
+        $result = $generator->parseContent($translations);
 
         $this->assertStringContainsString('z_key', $result);
         $this->assertStringContainsString('a_key', $result);

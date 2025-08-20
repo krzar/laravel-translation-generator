@@ -2,88 +2,137 @@
 
 namespace Krzar\LaravelTranslationGenerator\Tests\Unit\Services;
 
-use Illuminate\Support\Collection;
 use Krzar\LaravelTranslationGenerator\Services\Finders\LanguagesFinder;
 use Krzar\LaravelTranslationGenerator\Services\Generators\PhpFileGenerator;
 use Krzar\LaravelTranslationGenerator\Services\MakeTranslationFileService;
-use PHPUnit\Framework\Attributes\DataProvider;
+use Mockery;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class MakeTranslationFileServiceTest extends TestCase
 {
-    #[Test]
-    public function serviceIsReadonly(): void
-    {
-        $reflection = new \ReflectionClass(MakeTranslationFileService::class);
+    private MakeTranslationFileService $service;
 
-        $this->assertTrue($reflection->isReadOnly());
+    private PhpFileGenerator $phpFileGenerator;
+
+    private LanguagesFinder $languagesFinder;
+
+    private string $tempLangPath;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->tempLangPath = sys_get_temp_dir().'/test_lang_'.uniqid();
+        mkdir($this->tempLangPath);
+
+        if (! function_exists('lang_path')) {
+            function lang_path($path = '')
+            {
+                global $tempLangPath;
+
+                return $tempLangPath.($path ? DIRECTORY_SEPARATOR.$path : '');
+            }
+        }
+
+        $GLOBALS['tempLangPath'] = $this->tempLangPath;
+
+        $this->phpFileGenerator = Mockery::mock(PhpFileGenerator::class);
+        $this->languagesFinder = Mockery::mock(LanguagesFinder::class);
+
+        $this->service = new MakeTranslationFileService(
+            $this->phpFileGenerator,
+            $this->languagesFinder
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        if (is_dir($this->tempLangPath)) {
+            $this->removeDirectory($this->tempLangPath);
+        }
+        Mockery::close();
+        parent::tearDown();
     }
 
     #[Test]
-    public function constructorInjectsCorrectDependencies(): void
+    public function generates_files_for_provided_languages(): void
     {
-        $reflection = new \ReflectionClass(MakeTranslationFileService::class);
-        $constructor = $reflection->getConstructor();
-        $parameters = $constructor->getParameters();
+        $languages = collect(['en', 'pl', 'de']);
+        $fileName = 'messages';
+        $fileContent = '<?php return [];';
 
-        $this->assertCount(2, $parameters);
+        mkdir($this->tempLangPath.'/en');
+        mkdir($this->tempLangPath.'/pl');
+        mkdir($this->tempLangPath.'/de');
 
-        $this->assertEquals('phpFileGenerator', $parameters[0]->getName());
-        $this->assertEquals(PhpFileGenerator::class, $parameters[0]->getType()->getName());
-        $this->assertTrue($parameters[0]->isPromoted());
+        $this->phpFileGenerator->shouldReceive('parseContent')
+            ->times(3)
+            ->andReturn($fileContent);
 
-        $this->assertEquals('languagesFinder', $parameters[1]->getName());
-        $this->assertEquals(LanguagesFinder::class, $parameters[1]->getType()->getName());
-        $this->assertTrue($parameters[1]->isPromoted());
+        $this->service->generate($fileName, $languages);
+
+        $this->assertFileExists($this->tempLangPath.'/en/messages.php');
+        $this->assertFileExists($this->tempLangPath.'/pl/messages.php');
+        $this->assertFileExists($this->tempLangPath.'/de/messages.php');
+
+        $this->assertEquals($fileContent, file_get_contents($this->tempLangPath.'/en/messages.php'));
     }
 
     #[Test]
-    public function generateMethodExists(): void
+    public function uses_all_available_languages_when_empty_collection_provided(): void
     {
-        $this->assertTrue(method_exists(MakeTranslationFileService::class, 'generate'));
+        $availableLanguages = collect(['fr', 'es']);
+        $fileName = 'common';
+        $fileContent = '<?php return [];';
 
-        $reflection = new \ReflectionMethod(MakeTranslationFileService::class, 'generate');
-        $this->assertTrue($reflection->isPublic());
-        $this->assertEquals('void', $reflection->getReturnType()->getName());
+        mkdir($this->tempLangPath.'/fr');
+        mkdir($this->tempLangPath.'/es');
+
+        $this->languagesFinder->shouldReceive('getAvailableLanguages')
+            ->once()
+            ->andReturn($availableLanguages);
+
+        $this->phpFileGenerator->shouldReceive('parseContent')
+            ->times(2)
+            ->andReturn($fileContent);
+
+        $this->service->generate($fileName, collect());
+
+        $this->assertFileExists($this->tempLangPath.'/fr/common.php');
+        $this->assertFileExists($this->tempLangPath.'/es/common.php');
     }
 
     #[Test]
-    #[DataProvider('generateParametersDataProvider')]
-    public function generateMethodHasCorrectParameters(int $parameterIndex, string $expectedName, string $expectedType): void
+    public function creates_file_with_correct_content(): void
     {
-        $reflection = new \ReflectionMethod(MakeTranslationFileService::class, 'generate');
-        $parameters = $reflection->getParameters();
+        $languages = collect(['en']);
+        $fileName = 'validation';
+        $expectedContent = "<?php return ['required' => 'Field is required'];";
 
-        $this->assertArrayHasKey($parameterIndex, $parameters);
+        mkdir($this->tempLangPath.'/en');
 
-        $parameter = $parameters[$parameterIndex];
-        $this->assertEquals($expectedName, $parameter->getName());
-        $this->assertEquals($expectedType, $parameter->getType()->getName());
+        $this->phpFileGenerator->shouldReceive('parseContent')
+            ->once()
+            ->andReturn($expectedContent);
+
+        $this->service->generate($fileName, $languages);
+
+        $actualContent = file_get_contents($this->tempLangPath.'/en/validation.php');
+        $this->assertEquals($expectedContent, $actualContent);
     }
 
-    public static function generateParametersDataProvider(): array
+    private function removeDirectory(string $dir): void
     {
-        return [
-            [0, 'name', 'string'],
-            [1, 'languages', Collection::class],
-        ];
-    }
+        if (! is_dir($dir)) {
+            return;
+        }
 
-    #[Test]
-    public function serviceHasPrivateGenerateFileMethod(): void
-    {
-        $reflection = new \ReflectionClass(MakeTranslationFileService::class);
-
-        $this->assertTrue($reflection->hasMethod('generateFile'));
-
-        $method = $reflection->getMethod('generateFile');
-        $this->assertTrue($method->isPrivate());
-        $this->assertEquals('void', $method->getReturnType()->getName());
-
-        $parameters = $method->getParameters();
-        $this->assertCount(2, $parameters);
-        $this->assertEquals('name', $parameters[0]->getName());
-        $this->assertEquals('lang', $parameters[1]->getName());
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            $path = $dir.DIRECTORY_SEPARATOR.$file;
+            is_dir($path) ? $this->removeDirectory($path) : unlink($path);
+        }
+        rmdir($dir);
     }
 }
