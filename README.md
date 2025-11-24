@@ -14,7 +14,7 @@ This package allows you to:
 |   Laravel   | PHP  | Package |     Supported      |
 |:-----------:|:----:|:-------:|:------------------:|
 |  From 11.x  | 8.2+ |   4.x   | :white_check_mark: |
-|  From 10.x  | 8.1+ |   3.x   | :white_check_mark: |
+|  From 10.x  | 8.1+ |   3.x   |        :x:         |
 | 6.x to 10.x | 8.0+ |   2.x   |        :x:         |
 
 ## Installation
