@@ -11,11 +11,15 @@ This package allows you to:
 
 ## Requirements
 
-|   Laravel   | PHP  | Package |     Supported      |
-|:-----------:|:----:|:-------:|:------------------:|
-|  From 11.x  | 8.2+ |   4.x   | :white_check_mark: |
-|  From 10.x  | 8.1+ |   3.x   |        :x:         |
-| 6.x to 10.x | 8.0+ |   2.x   |        :x:         |
+| Version | Laravel     | PHP          | Supported          | 
+|---------|-------------|--------------|--------------------|
+| 4.x     | 11.x - 12.x | 8.2 - 8.5(*) | :white_check_mark: |
+| 3.x     | 10.x - 11.x | 8.1 - 8.3    | :x:                |
+| 2.x     | 6.x - 10.x  | 8.0 - 8.3    | :x:                |
+| 1.x     | 8.x         | 7.3 - 8.1    | :x:                |
+
+> [!NOTE]  
+> *PHP 8.5 is supported for Laravel 12 only
 
 ## Installation
 
