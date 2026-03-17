@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 class LanguagesFinder
 {
-    private const IGNORED_DIRECTORIES = ['.', '..'];
+    private const array IGNORED_DIRECTORIES = ['.', '..'];
 
     public function getAvailableLanguages(): Collection
     {

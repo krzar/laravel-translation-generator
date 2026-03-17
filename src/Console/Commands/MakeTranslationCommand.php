@@ -22,7 +22,7 @@ class MakeTranslationCommand extends Command
     /**
      * @var array<class-string<TranslationGenerator>>
      */
-    private const GENERATORS = [
+    private const array GENERATORS = [
         PhpFileGenerator::class,
         JsonFileGenerator::class,
     ];

@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 class PackagesTranslationsService
 {
-    private const VENDOR_PATH = 'vendor';
+    private const string VENDOR_PATH = 'vendor';
 
     public function findPackages(): ?Collection
     {
