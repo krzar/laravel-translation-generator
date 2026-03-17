@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
 
 class TranslationFilesFinder
 {
-    private const PHP_EXT = '.php';
+    private const string PHP_EXT = '.php';
 
-    private const JSON_EXT = '.json';
+    private const string JSON_EXT = '.json';
 
     public static function phpFiles(string $lang, ?string $package = null): Collection
     {
